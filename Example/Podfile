@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'OKPaypp_Example' do
+  pod 'OKPaypp', :path => '../'
+
+  target 'OKPaypp_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
