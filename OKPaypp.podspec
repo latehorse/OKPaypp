@@ -1,42 +1,43 @@
-#
-# Be sure to run `pod lib lint OKPaypp.podspec' to ensure this is a
-# valid spec before submitting.
-#
-# Any lines starting with a # are optional, but their use is encouraged
-# To learn more about a Podspec see https://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
   s.name             = 'OKPaypp'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of OKPaypp.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
+  s.summary          = 'OKPaypp iOS SDK.'
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+  移动应用支付接口。
+  开发者不再需要编写冗长的代码，简单几步就可以使你的应用获得支付功能。
+  让你的移动应用接入支付像大厦接入电力一样简单，方便，和温暖。
+  支持微信支付，公众账号支付，支付宝钱包。
                        DESC
 
-  s.homepage         = 'https://github.com/deadvia/OKPaypp'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
+  s.homepage         = 'https://github.com/latehorse/OKPaypp'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'deadvia' => 'deadvia@gmail.com' }
-  s.source           = { :git => 'https://github.com/deadvia/OKPaypp.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
-
+  s.source           = { :git => 'https://github.com/latehorse/OKPaypp.git', :tag => s.version.to_s }
+  s.requires_arc     = true
   s.ios.deployment_target = '8.0'
-
-  s.source_files = 'OKPaypp/Classes/**/*'
+  s.default_subspec = 'Core', 'Alipay', 'Wx'
   
-  # s.resource_bundles = {
-  #   'OKPaypp' => ['OKPaypp/Assets/*.png']
-  # }
+  s.subspec 'Core' do |core|
+      core.public_header_files = 'OKPaypp/*.h', 'OKPaypp/Core/OKPayDefaultConfigurator.h'
+      core.source_files = 'OKPaypp/*.{h,m}', 'OKPaypp/Core/*.{h,m}'
+      core.frameworks = 'CFNetwork', 'SystemConfiguration', 'Security', 'CoreTelephony'
+      core.ios.library = 'c++', 'stdc++', 'z'
+  end
+  
+  s.subspec 'Alipay' do |ss|
+      ss.ios.vendored_frameworks = 'OKPaypp/Channels/Alipay/*.framework'
+      ss.vendored_libraries = 'OKPaypp/Channels/Alipay/*.a'
+      ss.resource = 'OKPaypp/Channels/Alipay/*.bundle'
+      ss.frameworks = 'CoreMotion', 'CoreTelephony'
+      ss.dependency 'OKPaypp/Core'
+  end
+  
+  s.subspec 'Wx' do |ss|
+      ss.vendored_libraries = 'OKPaypp/Channels/Wx/*.a'
+      ss.source_files = 'OKPaypp/Channels/Wx/*.{h,m}'
+      ss.ios.library = 'z', 'sqlite3.0', 'c++'
+      ss.dependency 'OKPaypp/Core'
+  end
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end

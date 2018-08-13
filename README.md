@@ -1,6 +1,6 @@
 # OKPaypp
 
-[![CI Status](https://img.shields.io/travis/deadvia/OKPaypp.svg?style=flat)](https://travis-ci.org/deadvia/OKPaypp)
+[![CI Status](https://img.shields.io/travis/latehorse/OKPaypp.svg?style=flat)](https://travis-ci.org/deadvia/OKPaypp)
 [![Version](https://img.shields.io/cocoapods/v/OKPaypp.svg?style=flat)](https://cocoapods.org/pods/OKPaypp)
 [![License](https://img.shields.io/cocoapods/l/OKPaypp.svg?style=flat)](https://cocoapods.org/pods/OKPaypp)
 [![Platform](https://img.shields.io/cocoapods/p/OKPaypp.svg?style=flat)](https://cocoapods.org/pods/OKPaypp)

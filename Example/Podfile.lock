@@ -1,0 +1,24 @@
+PODS:
+  - OKPaypp (0.1.0):
+    - OKPaypp/Alipay (= 0.1.0)
+    - OKPaypp/Core (= 0.1.0)
+    - OKPaypp/Wx (= 0.1.0)
+  - OKPaypp/Alipay (0.1.0):
+    - OKPaypp/Core
+  - OKPaypp/Core (0.1.0)
+  - OKPaypp/Wx (0.1.0):
+    - OKPaypp/Core
+
+DEPENDENCIES:
+  - OKPaypp (from `../`)
+
+EXTERNAL SOURCES:
+  OKPaypp:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  OKPaypp: de6ab4c7267a08cbb5a1c1cf3e0accd94ee10bbd
+
+PODFILE CHECKSUM: f605643da200e2df15305f0fb5300e81ba067a12
+
+COCOAPODS: 1.5.3

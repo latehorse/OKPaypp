@@ -7,6 +7,7 @@
 //
 
 #import "OKViewController.h"
+#import <OKPaypp/OKPaypp.h>
 
 @interface OKViewController ()
 

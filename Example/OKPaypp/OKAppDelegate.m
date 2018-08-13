@@ -7,12 +7,17 @@
 //
 
 #import "OKAppDelegate.h"
+#import <OKPaypp/OKPaypp.h>
 
 @implementation OKAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    OKPayDefaultConfigurator *config = [[OKPayDefaultConfigurator alloc] init];
+    config.appScheme = @"com.tilink.360qws";
+    config.wxPayAppId = @"wx20f0b43b2dfe90a1";
+    config.WXAppdesc = @"lignwuapp";
     return YES;
 }
 
@@ -41,6 +46,18 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    return [OKPaypp handleOpenURL:url withCompletion:^(NSString *result, OKPayppError *error) {
+        NSLog(@"%@", result);
+    }];
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url sourceApplication:(nullable NSString *)sourceApplication annotation:(nonnull id)annotation {
+    return [OKPaypp handleOpenURL:url sourceApplication:sourceApplication withCompletion:^(NSString *result, OKPayppError *error) {
+        NSLog(@"%@", result);
+    }];
 }
 
 @end
