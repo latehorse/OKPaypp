@@ -29,14 +29,14 @@ Pod::Spec.new do |s|
       ss.ios.vendored_frameworks = 'OKPaypp/Channels/Alipay/*.framework'
       ss.vendored_libraries = 'OKPaypp/Channels/Alipay/*.a'
       ss.resource = 'OKPaypp/Channels/Alipay/*.bundle'
-      ss.frameworks = 'CoreMotion', 'CoreTelephony'
+      ss.frameworks = 'CoreMotion'
       ss.dependency 'OKPaypp/Core'
   end
   
   s.subspec 'Wx' do |ss|
       ss.vendored_libraries = 'OKPaypp/Channels/Wx/*.a'
       ss.source_files = 'OKPaypp/Channels/Wx/*.{h,m}'
-      ss.ios.library = 'z', 'sqlite3.0', 'c++'
+      ss.ios.library = 'sqlite3.0'
       ss.dependency 'OKPaypp/Core'
   end
 

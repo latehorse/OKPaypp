@@ -7,7 +7,7 @@
 //
 
 #import "OKPayment.h"
-#import "WXApi.h"
+#import <OKPaypp/WXApi.h>
 #import <AlipaySDK/AlipaySDK.h>
 
 #ifdef DEBUG
@@ -81,7 +81,7 @@ NSString * const kOKPayOrderKey = @"order";
     }else {
         if ([WXApi isWXAppInstalled]) {
             OKPayppLog(@"wx is not installed");
-            error = [[OKPayppError alloc] init];
+             OKPayppError *error = [[OKPayppError alloc] init];
             error.code = OKPayErrWxNotInstalled;
             
             if (completionBlock) {
@@ -92,7 +92,7 @@ NSString * const kOKPayOrderKey = @"order";
         
         if ([WXApi isWXAppSupportApi]) {
             OKPayppLog(@"wxapi is not support");
-            error = [[OKPayppError alloc] init];
+             OKPayppError *error = [[OKPayppError alloc] init];
             error.code = OKPayErrWxAppNotSupported;
             
             if (completionBlock) {
