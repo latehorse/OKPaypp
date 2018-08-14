@@ -36,7 +36,11 @@ NSString * const kOKPayCancelMessage    = @"用户中途取消";
 }
 
 + (void)createPayment:(NSObject *)charge viewController:(UIViewController *)viewController appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock {
-    [[OKPaypp sharedPay] createPayment:charge viewController:viewController appURLScheme:scheme withCompletion:completionBlock];
+    [self createPayment:charge channel:OKPayChannleAlipay viewController:viewController appURLScheme:scheme withCompletion:completionBlock];
+}
+
++ (void)createPayment:(NSObject *)charge channel:(OKPayChannle)channel viewController:(UIViewController *)viewController appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock {
+    [[OKPaypp sharedPay] createPayment:charge channel:channel viewController:viewController appURLScheme:scheme withCompletion:completionBlock];
 }
 
 + (void)createPatment:(NSObject *)charge appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock {
@@ -44,11 +48,11 @@ NSString * const kOKPayCancelMessage    = @"用户中途取消";
 }
 
 + (BOOL)handleOpenURL:(NSURL *)url withCompletion:(OKPayppCompletion)completion {
-    return [[OKPaypp sharedPay].payment handleOpenURL:url];;
+    return [[OKPaypp sharedPay].payment handleOpenURL:url withCompletion:completion];
 }
 
 + (BOOL)handleOpenURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication withCompletion:(OKPayppCompletion)completion {
-    return [[OKPaypp sharedPay].payment handleOpenURL:url];;
+    return [[OKPaypp sharedPay].payment handleOpenURL:url withCompletion:completion];;
 }
 
 + (NSString *)version {
@@ -60,20 +64,20 @@ NSString * const kOKPayCancelMessage    = @"用户中途取消";
 }
 
 #pragma mark - Pravite Method
-- (void)createPayment:(NSObject *)charge viewController:(UIViewController *)viewController appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock {
+- (void)createPayment:(NSObject *)charge channel:(OKPayChannle)channel viewController:(UIViewController *)viewController appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock {
     /**
      *
      * 此处需要根据charge 字段来判断渠道信息
      * 示例中：我们暂时使用 scheme 字段区分，只有支付宝需要这个字段
      */
-    if (scheme && scheme.length) {
+    if (channel == OKPayChannleAlipay) {
         // 支付宝支付
 #if __has_include(<OKPaypp/OKPaymentAlipay.h>)
         self.payment = [[NSClassFromString(@"OKPaymentAlipay") alloc] init];
         [self.payment prepareWithSettings:self.payDefaultConfigurator];
-        [self.payment jumpToPay:charge result:completionBlock];
+        [self.payment jumpToPay:[self.payment generatePayOrder:charge] result:completionBlock];
 #else
-        OKPayppLog(@"Alipay error: please import alipay sdk.");
+        OKPayppLog(@"Alipay error: please import Alipay sdk.");
         OKPayppError *error = [[OKPayppError alloc] init];
         error.code = OKPayErrInvalidChannel;
         
@@ -81,14 +85,29 @@ NSString * const kOKPayCancelMessage    = @"用户中途取消";
             completionBlock(nil, error);
         }
 #endif
-    }else {
+    }else if (channel == OKPayChannleWx) {
         // 微信支付
 #if __has_include(<OKPaypp/OKPaymentWx.h>)
         self.payment = [[NSClassFromString(@"OKPaymentWx") alloc] init];
         [self.payment prepareWithSettings:self.payDefaultConfigurator];
-        [self.payment jumpToPay:charge result:completionBlock];
+        [self.payment jumpToPay:[self.payment generatePayOrder:charge] result:completionBlock];
 #else
-        OKPayppLog(@"Wxpay error: please import wxpay sdk.");
+        OKPayppLog(@"Wxpay error: please import Wxpay sdk.");
+        OKPayppError *error = [[OKPayppError alloc] init];
+        error.code = OKPayErrInvalidChannel;
+        
+        if (completionBlock) {
+            completionBlock(nil, error);
+        }
+#endif
+    }else if (channel == OKPayChannleUnionPay) {
+        // 银联支付
+#if __has_include(<OKPaypp/OKPaymentUnionPay.h>)
+        self.payment = [[NSClassFromString(@"OKPaymentUnionPay") alloc] init];
+        [self.payment prepareWithSettings:self.payDefaultConfigurator];
+        [self.payment jumpToPay:[self.payment generatePayOrder:charge] viewController:viewController result:completionBlock];
+#else
+        OKPayppLog(@"Unionpay error: please import Unionpay sdk.");
         OKPayppError *error = [[OKPayppError alloc] init];
         error.code = OKPayErrInvalidChannel;
         

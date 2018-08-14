@@ -60,11 +60,12 @@ extern NSString * const kOKPayOrderKey;
 
 /**
  处理支付结果
-
+ 
  @param url 支付结果信息
+ @param completion 支付结果回调 Block，保证跳转支付过程中，当 app 被 kill 掉时，能通过这个接口得到支付结果
  @return 处理结果
  */
-- (BOOL)handleOpenURL:(NSURL *)url;
+- (BOOL)handleOpenURL:(NSURL *)url withCompletion:(OKPayppCompletion)completion;
 
 /**
  注册APPId

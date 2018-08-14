@@ -39,18 +39,25 @@
 }
 
 - (void)jumpToPay:(NSObject *)order viewController:(nullable UIViewController*)viewController result:(OKPayppCompletion)completionBlock {
+    self.payCompletionBlock = completionBlock;
+    
     [[AlipaySDK defaultService] payOrder:(NSString *)order fromScheme:self.appScheme callback:^(NSDictionary *resultDic) {
         NSString *result = resultDic[@"result"];
-        if (result.length > 0) {
-            
-        }else {
-            
+        NSInteger code = [resultDic[@"code"] integerValue];
+        OKPayppError *error = nil;
+        if (code != 0) {
+            error = [[OKPayppError alloc] init];
+            error.code = OKPayErrCancelled;
+        }
+        
+        if (self.payCompletionBlock) {
+            self.payCompletionBlock(result, error);
         }
     }];
 }
 
 #pragma mark - Public Method
-- (BOOL)handleOpenURL:(NSURL *)url {
+- (BOOL)handleOpenURL:(NSURL *)url withCompletion:(OKPayppCompletion)completion {
     __block BOOL success = NO;
     [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
         NSString *result = resultDic[@"result"];
@@ -66,6 +73,10 @@
         
         if (self.payCompletionBlock) {
             self.payCompletionBlock(result, error);
+        }
+        
+        if (completion) {
+            completion(result, error);
         }
     }];
     

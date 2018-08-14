@@ -10,6 +10,9 @@
 
 @interface OKPaymentWx () <WXApiDelegate>
 
+//处理支付结果回调
+@property (nonatomic, copy) OKPayppCompletion handleCompletionBlock;
+
 @end
 
 @implementation OKPaymentWx 
@@ -30,6 +33,10 @@
         
         if (_payCompletionBlock) {
             _payCompletionBlock(resp.errStr, error);
+        }
+        
+        if (_handleCompletionBlock) {
+            _handleCompletionBlock(resp.errStr, error);
         }
     }
 }
@@ -82,6 +89,8 @@
         return;
     }
     
+    self.payCompletionBlock = completionBlock;
+    
     NSDictionary *response = (NSDictionary *)order;
     PayReq *req = [[PayReq alloc] init];
     req.partnerId = [response objectForKey:@"partnerid"];
@@ -91,9 +100,7 @@
     req.timeStamp = [[response objectForKey:@"timestamp"]intValue];
     req.sign = [response objectForKey:@"sign"];
     
-    if ([WXApi sendReq:req]) {
-        
-    }
+    [WXApi sendReq:req];
 }
 
 #pragma mark - Public Method
@@ -101,7 +108,8 @@
     return [WXApi isWXAppInstalled];
 }
 
-- (BOOL)handleOpenURL:(NSURL *)url {
+- (BOOL)handleOpenURL:(NSURL *)url withCompletion:(OKPayppCompletion)completion {
+    self.handleCompletionBlock = completion;
     return [WXApi handleOpenURL:url delegate:self];
 }
 

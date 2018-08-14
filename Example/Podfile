@@ -1,8 +1,11 @@
 use_frameworks!
+platform :ios, '8.0'
+inhibit_all_warnings!
 
 target 'OKPaypp_Example' do
   pod 'OKPaypp', :path => '../'
-
+  pod 'OKPaypp/UnionPay', :path => '../'
+  
   target 'OKPaypp_Tests' do
     inherit! :search_paths
     

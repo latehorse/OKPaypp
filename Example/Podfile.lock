@@ -1,24 +1,27 @@
 PODS:
-  - OKPaypp (0.1.0):
-    - OKPaypp/Alipay (= 0.1.0)
-    - OKPaypp/Core (= 0.1.0)
-    - OKPaypp/Wx (= 0.1.0)
-  - OKPaypp/Alipay (0.1.0):
+  - OKPaypp (0.1.1):
+    - OKPaypp/Alipay (= 0.1.1)
+    - OKPaypp/Core (= 0.1.1)
+    - OKPaypp/Wx (= 0.1.1)
+  - OKPaypp/Alipay (0.1.1):
     - OKPaypp/Core
-  - OKPaypp/Core (0.1.0)
-  - OKPaypp/Wx (0.1.0):
+  - OKPaypp/Core (0.1.1)
+  - OKPaypp/UnionPay (0.1.1):
+    - OKPaypp/Core
+  - OKPaypp/Wx (0.1.1):
     - OKPaypp/Core
 
 DEPENDENCIES:
   - OKPaypp (from `../`)
+  - OKPaypp/UnionPay (from `../`)
 
 EXTERNAL SOURCES:
   OKPaypp:
     :path: "../"
 
 SPEC CHECKSUMS:
-  OKPaypp: 37739701259ad5403217b1b21cdd7b44fcb35866
+  OKPaypp: 179eae268a18c2703596b952ef1c887724ba6b07
 
-PODFILE CHECKSUM: cffaeb4eb5a908763696b334366fce753a1f18c5
+PODFILE CHECKSUM: 49976e4bee055bef350d0d077b49c6bb0a81dfe1
 
 COCOAPODS: 1.5.3

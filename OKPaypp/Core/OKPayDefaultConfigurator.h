@@ -31,6 +31,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 #endif
 
+#if __has_include(<OKPaypp/OKPaymentUnionPay.h>)
+//标识运行环境 00 代表接入生产环境（正式版本需要） 01 代表接入开发测试环境（测试版本需要）
+@property (nonatomic, strong) NSString *tnmode;
+#endif
+
 @end
 
 NS_ASSUME_NONNULL_END

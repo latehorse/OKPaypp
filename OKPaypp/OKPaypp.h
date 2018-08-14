@@ -33,9 +33,10 @@ typedef NS_ENUM(NSUInteger, OKPayErrorOption)
     OKPayErrQqNotInstalled,
 };
 
-typedef NS_ENUM(NSUInteger, OKPayRequestContentTypeOption) {
-    OKPayRequestContentTypeJSON,
-    OKPayRequestContentTypeForm
+typedef NS_ENUM(NSUInteger, OKPayChannle) {
+    OKPayChannleAlipay,     //!< 支付宝支付 默认
+    OKPayChannleWx,         //!< 微信支付
+    OKPayChannleUnionPay,   //!< 银联支付
 };
 
 @interface OKPayppError : NSObject
@@ -67,6 +68,17 @@ typedef void (^OKPayppCompletion)(NSString *result, OKPayppError *error);
  @param completionBlock 支付结果回调
  */
 + (void)createPayment:(NSObject *)charge viewController:(UIViewController *)viewController appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock;
+
+/**
+支付调用接口
+
+@param charge Charge 对象(JSON 格式字符串 或 NSDictionary)
+@param channel 支付渠道
+@param viewController 银联渠道需要
+@param scheme URL Scheme，支付宝渠道需要
+@param completionBlock 支付结果回调
+*/
++ (void)createPayment:(NSObject *)charge channel:(OKPayChannle)channel viewController:(UIViewController *)viewController appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock;
 
 /**
  支付调用接口（支付宝/微信）

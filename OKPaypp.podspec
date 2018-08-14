@@ -1,13 +1,13 @@
 Pod::Spec.new do |s|
   s.name             = 'OKPaypp'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'OKPaypp iOS SDK.'
 
   s.description      = <<-DESC
   移动应用支付接口。
   开发者不再需要编写冗长的代码，简单几步就可以使你的应用获得支付功能。
   让你的移动应用接入支付像大厦接入电力一样简单，方便，和温暖。
-  支持微信支付，公众账号支付，支付宝钱包。
+  支持微信支付，公众账号支付，支付宝钱包，银联等。
                        DESC
 
   s.homepage         = 'https://github.com/latehorse/OKPaypp'
@@ -39,6 +39,14 @@ Pod::Spec.new do |s|
       ss.public_header_files = 'OKPaypp/Channels/Wx/*.h'
       ss.source_files = 'OKPaypp/Channels/Wx/*.{h,m}'
       ss.vendored_libraries = 'OKPaypp/Channels/Wx/*.a'
+      ss.ios.library = 'sqlite3.0'
+      ss.dependency 'OKPaypp/Core'
+  end
+  
+  s.subspec 'UnionPay' do |ss|
+      ss.public_header_files = 'OKPaypp/Channels/UnionPay/*.h'
+      ss.source_files = 'OKPaypp/Channels/UnionPay/*.{h,m}'
+      ss.vendored_libraries = 'OKPaypp/Channels/UnionPay/*.a'
       ss.ios.library = 'sqlite3.0'
       ss.dependency 'OKPaypp/Core'
   end
