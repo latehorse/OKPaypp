@@ -6,11 +6,100 @@
 //
 
 #import "OKPaypp.h"
-#import "OKPay.h"
+#import "OKPayment.h"
 
-NSString * const kOKPaySuccessMessage           = @"订单支付成功";
-NSString * const kOKPayFailureMessage           = @"订单支付失败";
-NSString * const kOKPayCancelMessage            = @"用户中途取消";
+NSString * const kOKPaySuccessMessage   = @"订单支付成功";
+NSString * const kOKPayFailureMessage   = @"订单支付失败";
+NSString * const kOKPayCancelMessage    = @"用户中途取消";
+
+@interface OKPaypp ()
+
+@property (nonatomic, strong) id <OKPayment> payment;
+@property (nonatomic, strong) OKPayDefaultConfigurator *payDefaultConfigurator;
+
+@end
+
+@implementation OKPaypp
+
++ (instancetype)sharedPay {
+    static dispatch_once_t onceToken;
+    static OKPaypp *instance;
+    dispatch_once(&onceToken, ^{
+        instance = [[OKPaypp alloc] init];
+    });
+    return instance;
+}
+
+#pragma mark - Public Method
++ (void)setPayPayDefaultConfigurator:(OKPayDefaultConfigurator *)payDefaultConfigurator {
+    [[OKPaypp sharedPay] setPayDefaultConfigurator:payDefaultConfigurator];
+}
+
++ (void)createPayment:(NSObject *)charge viewController:(UIViewController *)viewController appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock {
+    [[OKPaypp sharedPay] createPayment:charge viewController:viewController appURLScheme:scheme withCompletion:completionBlock];
+}
+
++ (void)createPatment:(NSObject *)charge appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock {
+    [self createPayment:charge viewController:nil appURLScheme:scheme withCompletion:completionBlock];
+}
+
++ (BOOL)handleOpenURL:(NSURL *)url withCompletion:(OKPayppCompletion)completion {
+    return [[OKPaypp sharedPay].payment handleOpenURL:url];;
+}
+
++ (BOOL)handleOpenURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication withCompletion:(OKPayppCompletion)completion {
+    return [[OKPaypp sharedPay].payment handleOpenURL:url];;
+}
+
++ (NSString *)version {
+    return @"0.1.0";
+}
+
++ (void)setDebugMode:(BOOL)enabled {
+    [[OKPaypp sharedPay].payment setDebugMode:enabled];
+}
+
+#pragma mark - Pravite Method
+- (void)createPayment:(NSObject *)charge viewController:(UIViewController *)viewController appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock {
+    /**
+     *
+     * 此处需要根据charge 字段来判断渠道信息
+     * 示例中：我们暂时使用 scheme 字段区分，只有支付宝需要这个字段
+     */
+    if (scheme && scheme.length) {
+        // 支付宝支付
+#if __has_include(<OKPaypp/OKPaymentAlipay.h>)
+        self.payment = [[NSClassFromString(@"OKPaymentAlipay") alloc] init];
+        [self.payment prepareWithSettings:self.payDefaultConfigurator];
+        [self.payment jumpToPay:charge result:completionBlock];
+#else
+        OKPayppLog(@"Alipay error: please import alipay sdk.");
+        OKPayppError *error = [[OKPayppError alloc] init];
+        error.code = OKPayErrInvalidChannel;
+        
+        if (completionBlock) {
+            completionBlock(nil, error);
+        }
+#endif
+    }else {
+        // 微信支付
+#if __has_include(<OKPaypp/OKPaymentWx.h>)
+        self.payment = [[NSClassFromString(@"OKPaymentWx") alloc] init];
+        [self.payment prepareWithSettings:self.payDefaultConfigurator];
+        [self.payment jumpToPay:charge result:completionBlock];
+#else
+        OKPayppLog(@"Wxpay error: please import wxpay sdk.");
+        OKPayppError *error = [[OKPayppError alloc] init];
+        error.code = OKPayErrInvalidChannel;
+        
+        if (completionBlock) {
+            completionBlock(nil, error);
+        }
+#endif
+    }
+}
+
+@end
 
 @implementation OKPayppError
 
@@ -71,38 +160,3 @@ NSString * const kOKPayCancelMessage            = @"用户中途取消";
 }
 
 @end
-
-@implementation OKPaypp
-
-+ (void)setPayPayDefaultConfigurator:(OKPayDefaultConfigurator *)payDefaultConfigurator {
-    [OKPay setPayPayDefaultConfigurator:payDefaultConfigurator];
-}
-
-+ (void)createPayment:(NSObject *)charge viewController:(UIViewController *)viewController appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock {
-    OKPayment *payment = [[OKPayment alloc] init];
-    [OKPay payment:payment withOrderInfo:charge withCompletion:completionBlock];
-}
-
-+ (void)createPatment:(NSObject *)charge appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock {
-    [self createPayment:charge viewController:nil appURLScheme:scheme withCompletion:completionBlock];
-}
-
-+ (BOOL)handleOpenURL:(NSURL *)url withCompletion:(OKPayppCompletion)completion {
-    return [OKPay handleOpenURL:url sourceApplication:@""];
-}
-
-+ (BOOL)handleOpenURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication withCompletion:(OKPayppCompletion)completion {
-    return [OKPay handleOpenURL:url sourceApplication:sourceApplication];
-}
-
-+ (NSString *)version {
-    return @"0.1.0";
-}
-
-+ (void)setDebugMode:(BOOL)enabled {
-    [OKPay setDebugMode:enabled];
-}
-
-@end
-
-

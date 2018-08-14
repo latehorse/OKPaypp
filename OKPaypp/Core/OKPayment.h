@@ -8,9 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import "OKPayDefaultConfigurator.h"
-#import <OKPaypp.h>
+#import "OKPaypp.h"
+
+#ifdef DEBUG
+#define OKPayppLog(FORMAT, ...) fprintf(stderr,"%s:%d\t%s\n",[[[NSString stringWithUTF8String:__FILE__] lastPathComponent] UTF8String], __LINE__, [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);
+#else
+#define OKPayppLog(...)
+#endif
 
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString * const kOKPayOrderKey;
 
 @protocol OKPayment <NSObject>
 
@@ -72,15 +80,6 @@ NS_ASSUME_NONNULL_BEGIN
  @param enabled 开启关闭
  */
 - (void)setDebugMode:(BOOL)enabled;
-
-@end
-
-@interface OKPayment : NSObject <OKPayment>
-
-//应用注册scheme,在AlixPayDemo-Info.plist定义URL types
-@property (nonatomic, strong) NSString *appScheme;
-//支付结果回调
-@property (nonatomic, copy) OKPayppCompletion payCompletionBlock;
 
 @end
 

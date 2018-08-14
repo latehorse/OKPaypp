@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
 @property (nonatomic, strong) NSString *appScheme;
 
-#if __has_include(<OKPaypp/WXApi.h>)
+#if __has_include(<OKPaypp/OKPaymentWx.h>)
 
 //微信支付
 

@@ -3,11 +3,11 @@ PODS:
     - OKPaypp/Alipay (= 0.1.0)
     - OKPaypp/Core (= 0.1.0)
     - OKPaypp/Wx (= 0.1.0)
-  - OKPaypp/Alipay (0.1.0)
-  - OKPaypp/Core (0.1.0):
-    - OKPaypp/Alipay
-    - OKPaypp/Wx
-  - OKPaypp/Wx (0.1.0)
+  - OKPaypp/Alipay (0.1.0):
+    - OKPaypp/Core
+  - OKPaypp/Core (0.1.0)
+  - OKPaypp/Wx (0.1.0):
+    - OKPaypp/Core
 
 DEPENDENCIES:
   - OKPaypp (from `../`)
@@ -17,7 +17,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  OKPaypp: 7ff2e703551ec9ebff46de927f035a7665160dc7
+  OKPaypp: 37739701259ad5403217b1b21cdd7b44fcb35866
 
 PODFILE CHECKSUM: cffaeb4eb5a908763696b334366fce753a1f18c5
 

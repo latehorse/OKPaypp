@@ -19,23 +19,26 @@ Pod::Spec.new do |s|
   s.default_subspec = 'Core', 'Alipay', 'Wx'
   
   s.subspec 'Core' do |core|
-      core.public_header_files = 'OKPaypp/*.h', 'OKPaypp/Core/OKPayDefaultConfigurator.h'
+      core.public_header_files = 'OKPaypp/*.h', 'OKPaypp/Core/*.h'
       core.source_files = 'OKPaypp/*.{h,m}', 'OKPaypp/Core/*.{h,m}'
       core.frameworks = 'CFNetwork', 'SystemConfiguration', 'Security', 'CoreTelephony'
       core.ios.library = 'c++', 'stdc++', 'z'
+      core.xcconfig = { 'OTHER_LDFLAGS' => '-ObjC' }
   end
   
   s.subspec 'Alipay' do |ss|
+      ss.public_header_files = 'OKPaypp/Channels/Alipay/*.h'
+      ss.source_files = 'OKPaypp/Channels/Alipay/*.{h,m}'
       ss.ios.vendored_frameworks = 'OKPaypp/Channels/Alipay/*.framework'
-      ss.vendored_libraries = 'OKPaypp/Channels/Alipay/*.a'
       ss.resource = 'OKPaypp/Channels/Alipay/*.bundle'
       ss.frameworks = 'CoreMotion'
       ss.dependency 'OKPaypp/Core'
   end
   
   s.subspec 'Wx' do |ss|
-      ss.vendored_libraries = 'OKPaypp/Channels/Wx/*.a'
+      ss.public_header_files = 'OKPaypp/Channels/Wx/*.h'
       ss.source_files = 'OKPaypp/Channels/Wx/*.{h,m}'
+      ss.vendored_libraries = 'OKPaypp/Channels/Wx/*.a'
       ss.ios.library = 'sqlite3.0'
       ss.dependency 'OKPaypp/Core'
   end

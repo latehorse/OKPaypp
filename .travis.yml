@@ -18,7 +18,7 @@ script:
   - xcodebuild -version
   - xcodebuild -showsdks
   - xcodebuild -workspace Example/OKPaypp.xcworkspace -scheme OKPaypp-Example -sdk iphonesimulator11.0 ONLY_ACTIVE_ARCH=NO | xcpretty
-  - pod lib lint --allow-warnings
+  - pod lib lint --use-libraries --allow-warnings --verbose
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

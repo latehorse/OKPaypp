@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import <OKPaypp/OKPayDefaultConfigurator.h>
+#import "OKPayDefaultConfigurator.h"
 
 typedef NS_ENUM(NSUInteger, OKPayErrorOption)
 {
@@ -50,6 +50,7 @@ typedef NS_ENUM(NSUInteger, OKPayRequestContentTypeOption) {
 typedef void (^OKPayppCompletion)(NSString *result, OKPayppError *error);
 
 
+@class OKPayDefaultConfigurator;
 @interface OKPaypp : NSObject
 
 /**
