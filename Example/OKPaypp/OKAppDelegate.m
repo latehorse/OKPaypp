@@ -18,6 +18,7 @@
     config.appScheme = @"com.tilink.360qws";
     config.wxPayAppId = @"wx20f0b43b2dfe90a1";
     config.WXAppdesc = @"lignwuapp";
+    config.tnmode = @"01";
     return YES;
 }
 

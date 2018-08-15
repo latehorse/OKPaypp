@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
 
   s.homepage         = 'https://github.com/latehorse/OKPaypp'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'deadvia' => 'deadvia@gmail.com' }
+  s.author           = { 'yuhanle' => 'deadvia@gmail.com' }
   s.source           = { :git => 'https://github.com/latehorse/OKPaypp.git', :tag => s.version.to_s }
   s.requires_arc     = true
   s.ios.deployment_target = '8.0'
@@ -45,9 +45,8 @@ Pod::Spec.new do |s|
   
   s.subspec 'UnionPay' do |ss|
       ss.public_header_files = 'OKPaypp/Channels/UnionPay/*.h'
-      ss.source_files = 'OKPaypp/Channels/UnionPay/*.{h,m}'
+      ss.source_files = 'OKPaypp/Channels/UnionPay/*.{h,mm}'
       ss.vendored_libraries = 'OKPaypp/Channels/UnionPay/*.a'
-      ss.ios.library = 'sqlite3.0'
       ss.dependency 'OKPaypp/Core'
   end
 

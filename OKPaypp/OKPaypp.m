@@ -56,7 +56,7 @@ NSString * const kOKPayCancelMessage    = @"用户中途取消";
 }
 
 + (NSString *)version {
-    return @"0.1.0";
+    return @"0.1.1";
 }
 
 + (void)setDebugMode:(BOOL)enabled {
@@ -65,11 +65,6 @@ NSString * const kOKPayCancelMessage    = @"用户中途取消";
 
 #pragma mark - Pravite Method
 - (void)createPayment:(NSObject *)charge channel:(OKPayChannle)channel viewController:(UIViewController *)viewController appURLScheme:(NSString *)scheme withCompletion:(OKPayppCompletion)completionBlock {
-    /**
-     *
-     * 此处需要根据charge 字段来判断渠道信息
-     * 示例中：我们暂时使用 scheme 字段区分，只有支付宝需要这个字段
-     */
     if (channel == OKPayChannleAlipay) {
         // 支付宝支付
 #if __has_include(<OKPaypp/OKPaymentAlipay.h>)
@@ -89,6 +84,7 @@ NSString * const kOKPayCancelMessage    = @"用户中途取消";
         // 微信支付
 #if __has_include(<OKPaypp/OKPaymentWx.h>)
         self.payment = [[NSClassFromString(@"OKPaymentWx") alloc] init];
+        [self.payment registerApp:self.payDefaultConfigurator.wxPayAppId];
         [self.payment prepareWithSettings:self.payDefaultConfigurator];
         [self.payment jumpToPay:[self.payment generatePayOrder:charge] result:completionBlock];
 #else

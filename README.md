@@ -22,7 +22,7 @@ pod 'OKPaypp'
 
 ## Author
 
-deadvia, deadvia@gmail.com
+yuhanle, deadvia@gmail.com
 
 ## License
 
