@@ -43,11 +43,36 @@
     
     [[AlipaySDK defaultService] payOrder:(NSString *)order fromScheme:self.appScheme callback:^(NSDictionary *resultDic) {
         NSString *result = resultDic[@"result"];
-        NSInteger code = [resultDic[@"code"] integerValue];
+        NSInteger code = [resultDic[@"resultStatus"] integerValue];
         OKPayppError *error = nil;
-        if (code != 0) {
+        if (code == 9000) {
+            // 支付成功
+            
+        }else {
+            // 支付失败
             error = [[OKPayppError alloc] init];
-            error.code = OKPayErrCancelled;
+            if (code == 8000) {
+                //正在处理中，支付结果未知（有可能已经支付成功）,请查询商户订单列表中订单的支付状态
+                error.code = OKPayErrProcessing;
+            }else if (code == 4000) {
+                // 支付失败
+                error.code = OKPayErrChannelReturnFail;
+            }else if (code == 5000) {
+                // 重复请求
+                error.code = OKPayErrInvalidCharge;
+            }else if (code == 6001) {
+                // 用户中途取消
+                error.code = OKPayErrCancelled;
+            }else if (code == 6002) {
+                // 网络连接出错
+                error.code = OKPayErrConnectionError;
+            }else if (code == 6004) {
+                // 支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态
+                error.code = OKPayErrRequestTimeOut;
+            }else {
+                // 其他错误
+                error.code = OKPayErrUnknownError;
+            }
         }
         
         if (self.payCompletionBlock) {
@@ -61,14 +86,36 @@
     __block BOOL success = NO;
     [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
         NSString *result = resultDic[@"result"];
-        NSInteger code = [resultDic[@"code"] integerValue];
+        NSInteger code = [resultDic[@"resultStatus"] integerValue];
         OKPayppError *error = nil;
-        if (code != 0) {
-            success = NO;
-            error = [[OKPayppError alloc] init];
-            error.code = OKPayErrCancelled;
-        }else {
+        if (code == 9000) {
+            // 支付成功
             success = YES;
+        }else {
+            // 支付失败
+            error = [[OKPayppError alloc] init];
+            if (code == 8000) {
+                //正在处理中，支付结果未知（有可能已经支付成功）,请查询商户订单列表中订单的支付状态
+                error.code = OKPayErrProcessing;
+            }else if (code == 4000) {
+                // 支付失败
+                error.code = OKPayErrChannelReturnFail;
+            }else if (code == 5000) {
+                // 重复请求
+                error.code = OKPayErrInvalidCharge;
+            }else if (code == 6001) {
+                // 用户中途取消
+                error.code = OKPayErrCancelled;
+            }else if (code == 6002) {
+                // 网络连接出错
+                error.code = OKPayErrConnectionError;
+            }else if (code == 6004) {
+                // 支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态
+                error.code = OKPayErrRequestTimeOut;
+            }else {
+                // 其他错误
+                error.code = OKPayErrUnknownError;
+            }
         }
         
         if (self.payCompletionBlock) {

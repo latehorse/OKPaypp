@@ -25,10 +25,30 @@
 - (void)onResp:(BaseResp *)resp {
     if ([resp isKindOfClass:[PayResp class]]) {
         OKPayppError *error = nil;
-        if (resp.errCode) {
-            OKPayppLog(@"Wxpay result error: %@ %@", @(resp.errCode), resp.errStr);
+        if (resp.errCode == 0) {
+            // 成功
+            OKPayppLog(@"Wxpay result success");
+        }else {
             error = [[OKPayppError alloc] init];
-            error.code = OKPayErrCancelled;
+            if (resp.errCode == -1) {
+                OKPayppLog(@"Wxpay result error: %@ %@", @(resp.errCode), resp.errStr);
+                error.code = OKPayErrInvalidCharge;
+            }else if (resp.errCode == -2) {
+                OKPayppLog(@"Wxpay result error: %@ %@", @(resp.errCode), resp.errStr);
+                error.code = OKPayErrCancelled;
+            }else if (resp.errCode == -3) {
+                OKPayppLog(@"Wxpay result error: %@ %@", @(resp.errCode), resp.errStr);
+                error.code = OKPayErrInvalidCredential;
+            }else if (resp.errCode == -4) {
+                OKPayppLog(@"Wxpay result error: %@ %@", @(resp.errCode), resp.errStr);
+                error.code = OKPayErrConnectionError;
+            }else if (resp.errCode == -5) {
+                OKPayppLog(@"Wxpay result error: %@ %@", @(resp.errCode), resp.errStr);
+                error.code = OKPayErrWxAppNotSupported;
+            }else {
+                OKPayppLog(@"Wxpay result error: %@ %@", @(resp.errCode), resp.errStr);
+                error.code = OKPayErrUnknownError;
+            }
         }
         
         if (_payCompletionBlock) {

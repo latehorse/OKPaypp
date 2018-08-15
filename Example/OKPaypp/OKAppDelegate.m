@@ -19,6 +19,9 @@
     config.wxPayAppId = @"wx20f0b43b2dfe90a1";
     config.WXAppdesc = @"lignwuapp";
     config.tnmode = @"01";
+    
+    [OKPaypp setPayPayDefaultConfigurator:config];
+    
     return YES;
 }
 
@@ -48,6 +51,14 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    return [OKPaypp handleOpenURL:url withCompletion:^(NSString *result, OKPayppError *error) {
+        NSLog(@"%@", result);
+    }];
+}
+#endif
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     return [OKPaypp handleOpenURL:url withCompletion:^(NSString *result, OKPayppError *error) {

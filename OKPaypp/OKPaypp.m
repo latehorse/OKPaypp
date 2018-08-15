@@ -124,7 +124,7 @@ NSString * const kOKPayCancelMessage    = @"用户中途取消";
             return @"无效支付信息";
             break;
         case OKPayErrInvalidCredential:
-            return @"无效信用卡";
+            return @"无效凭据";
             break;
         case OKPayErrInvalidChannel:
             return @"无效支付渠道";
