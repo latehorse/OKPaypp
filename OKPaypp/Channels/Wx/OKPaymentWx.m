@@ -87,7 +87,7 @@
 }
 
 - (void)jumpToPay:(NSObject *)order viewController:(nullable UIViewController*)viewController result:(OKPayppCompletion)completionBlock {
-    if ([WXApi isWXAppInstalled]) {
+    if (![WXApi isWXAppInstalled]) {
         OKPayppLog(@"wx is not installed");
         OKPayppError *error = [[OKPayppError alloc] init];
         error.code = OKPayErrWxNotInstalled;
@@ -98,7 +98,7 @@
         return;
     }
     
-    if ([WXApi isWXAppSupportApi]) {
+    if (![WXApi isWXAppSupportApi]) {
         OKPayppLog(@"wxapi is not support");
         OKPayppError *error = [[OKPayppError alloc] init];
         error.code = OKPayErrWxAppNotSupported;
